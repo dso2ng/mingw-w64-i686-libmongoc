@@ -1,0 +1,40 @@
+diff --git i/CMakeLists.txt w/CMakeLists.txt
+index d1ff0ca4f..757407e24 100644
+--- i/CMakeLists.txt
++++ w/CMakeLists.txt
+@@ -553,7 +553,7 @@ if (NOT ENABLE_SSL STREQUAL OFF)
+       set (SSL_LIBS ${OPENSSL_LIBRARIES})
+       include_directories (${OPENSSL_INCLUDE_DIR})
+       if(WIN32)
+-         set(SSL_LIBS ${SSL_LIBS} crypt32.lib)
++         set(SSL_LIBS ${SSL_LIBS} crypt32)
+       endif()
+    elseif (SECURE_TRANSPORT)
+       message (STATUS "Compiling against Secure Transport")
+@@ -572,7 +572,7 @@ if (NOT ENABLE_SSL STREQUAL OFF)
+               ${SOURCE_DIR}/src/mongoc/mongoc-stream-tls-secure-channel.c
+               ${SOURCE_DIR}/src/mongoc/mongoc-secure-channel.c
+       )
+-      set(SSL_LIBS secur32.lib crypt32.lib Bcrypt.lib)
++      set(SSL_LIBS secur32 crypt32 Bcrypt)
+    elseif (LIBRESSL)
+       message (STATUS "Compiling against LibreSSL")
+       set (SOURCES ${SOURCES}
+@@ -600,7 +600,7 @@ if (MONGOC_ENABLE_SASL)
+       message (STATUS "Compiling against Windows SSPI")
+       set (SOURCES ${SOURCES} ${SOURCE_DIR}/src/mongoc/mongoc-cluster-sspi.c)
+       set (SOURCES ${SOURCES} ${SOURCE_DIR}/src/mongoc/mongoc-sspi.c)
+-      set (SASL_LIBS secur32.lib crypt32.lib Shlwapi.lib)
++      set (SASL_LIBS secur32 crypt32 Shlwapi)
+    elseif (MONGOC_ENABLE_SASL_GSSAPI)
+       set (SOURCES ${SOURCES} ${SOURCE_DIR}/src/mongoc/mongoc-cluster-gssapi.c)
+       set (SOURCES ${SOURCES} ${SOURCE_DIR}/src/mongoc/mongoc-gssapi.c)
+@@ -624,7 +624,7 @@ endif()
+ 
+ set (LIBS ${SASL_LIBS} ${SSL_LIBS} ${SHM_LIB} ${RESOLV_LIBS} ${SNAPPY_LIBS} Threads::Threads)
+ if(WIN32)
+-   set (LIBS ${LIBS} ws2_32)
++   set (LIBS ${LIBS} -lws2_32)
+ endif()
+ 
+ add_library(mongoc_shared SHARED ${SOURCES} ${HEADERS})
